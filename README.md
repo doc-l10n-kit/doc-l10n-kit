@@ -1,8 +1,8 @@
-# quarkus-adoc-po-translator
+# doc-l10n-kit
 
 [![Actions Status](https://github.com/i18n-quarkusio/quarkus-adoc-po-translator/workflows/CI/badge.svg)](https://github.com/i18n-quarkusio/quarkus-adoc-po-translator/actions)
 
-quarkus-adoc-po-translator is an utility to translate .adoc.po files extracted from quarkus documentations asciidoctor files by po4a.
+doc-l10n-kit is a set of utilities to translate .po files.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
@@ -46,6 +46,6 @@ translator:
 uber-jar
 
 ```
-java -jar quarkus-adoc-po-translator.jar [<path to source po file>...] \
+java -jar quarkus-adoc-po-translator.jar translate [<path to source po file>...] \
 [--srcLang <source language>] [--dstLang <destination language>]
 ```

@@ -5,4 +5,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name="asciidoc-po-translator"
+rootProject.name="doc-l10n-kit"
