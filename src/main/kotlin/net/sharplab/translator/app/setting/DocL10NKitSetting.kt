@@ -5,7 +5,7 @@ import java.util.*
 import javax.enterprise.context.Dependent
 
 @Dependent
-class AsciiDocPoTranslatorSetting {
+class DocL10NKitSetting {
     @ConfigProperty(name = "translator.deepL.apiKey")
     var deepLApiKey: Optional<String> = Optional.empty()
     @ConfigProperty(name = "translator.language.source", defaultValue = "en")

@@ -2,22 +2,22 @@ package net.sharplab.translator.app.cli
 
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
-import net.sharplab.translator.app.service.AsciiDocPoTranslatorAppService
-import net.sharplab.translator.app.setting.AsciiDocPoTranslatorSetting
+import net.sharplab.translator.app.service.DocL10NKitAppService
+import net.sharplab.translator.app.setting.DocL10NKitSetting
 import picocli.CommandLine
 import picocli.CommandLine.IFactory
 import java.io.File
 import javax.inject.Inject
 
 @QuarkusMain
-@CommandLine.Command(name = "quarkus-adoc-po-translator", subcommands = [AsciiDocPoTranslatorCli.TranslateCommand::class])
-class AsciiDocPoTranslatorCli : QuarkusApplication {
+@CommandLine.Command(name = "quarkus-adoc-po-translator", subcommands = [DocL10NKitCli.TranslateCommand::class])
+class DocL10NKitCli : QuarkusApplication {
 
     @Inject
     var factory: IFactory? = null
 
     @CommandLine.Command(name = "translate")
-    class TranslateCommand(private val asciiDocPoTranslatorAppService: AsciiDocPoTranslatorAppService, private val asciiDocPoTranslatorSetting: AsciiDocPoTranslatorSetting) : Runnable {
+    class TranslateCommand(private val asciiDocPoTranslatorAppService: DocL10NKitAppService, private val asciiDocPoTranslatorSetting: DocL10NKitSetting) : Runnable {
 
         @CommandLine.Parameters(description = ["file path"])
         private var path: List<File>? = null
@@ -42,7 +42,7 @@ class AsciiDocPoTranslatorCli : QuarkusApplication {
     }
 
     @CommandLine.Command(name = "normalize")
-    class NormalizeCommand(private val asciiDocPoTranslatorAppService: AsciiDocPoTranslatorAppService, private val asciiDocPoTranslatorSetting: AsciiDocPoTranslatorSetting) : Runnable {
+    class NormalizeCommand(private val asciiDocPoTranslatorAppService: DocL10NKitAppService, private val asciiDocPoTranslatorSetting: DocL10NKitSetting) : Runnable {
 
         @CommandLine.Parameters(description = ["file path"])
         private var path: List<File>? = null

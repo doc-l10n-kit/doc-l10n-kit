@@ -8,9 +8,9 @@ import java.io.File
 import javax.enterprise.context.Dependent
 
 @Dependent
-class AsciiDocPoTranslatorAppServiceImpl(private val poTranslatorService: PoTranslatorService) : AsciiDocPoTranslatorAppService {
+class DocL10NKitAppServiceImpl(private val poTranslatorService: PoTranslatorService) : DocL10NKitAppService {
 
-    private val logger = Logger.getLogger(AsciiDocPoTranslatorAppServiceImpl::class.java)
+    private val logger = Logger.getLogger(DocL10NKitAppServiceImpl::class.java)
 
     private val poReader = PoReader()
     private val poWriter = PoWriter()

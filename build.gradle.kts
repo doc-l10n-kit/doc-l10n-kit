@@ -1,18 +1,20 @@
 plugins {
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.allopen") version "1.6.21"
-    id("io.quarkus") version "2.9.2.Final"
+    id("io.quarkus")
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
 }
 
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
-val quarkusAdocPoTranslatorVersion: String by project
+val quarkusPlatformVersion: String by project
+val docl10nkitVersion: String by project
+
+
 val deepl4jVersion = "0.1.2.RELEASE"
 val jgettextVersion = "0.15.1"
 val asciidoctorjVersion = "2.5.7"
@@ -21,7 +23,7 @@ val deeplJavaVersion = "0.2.0"
 val assertJVersion = "3.23.1"
 
 dependencies {
-    implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:2.9.2.Final"))
+    implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-rest-client-jackson")
     implementation("io.quarkus:quarkus-picocli")
     implementation("io.quarkus:quarkus-kotlin")
@@ -43,7 +45,7 @@ dependencies {
 }
 
 group = "net.sharplab.translator"
-version = quarkusAdocPoTranslatorVersion
+version = docl10nkitVersion
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
