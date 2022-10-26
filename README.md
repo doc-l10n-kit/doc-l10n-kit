@@ -1,6 +1,6 @@
 # doc-l10n-kit
 
-[![Actions Status](https://github.com/i18n-quarkusio/quarkus-adoc-po-translator/workflows/CI/badge.svg)](https://github.com/i18n-quarkusio/quarkus-adoc-po-translator/actions)
+[![Actions Status](https://github.com/doc-l10n-kit/doc-l10n-kit/workflows/CI/badge.svg)](https://github.com/doc-l10n-kit/doc-l10n-kit/actions)
 
 doc-l10n-kit is a set of utilities to translate .po files.
 
