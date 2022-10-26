@@ -19,7 +19,7 @@ val deepl4jVersion = "0.1.2.RELEASE"
 val jgettextVersion = "0.15.1"
 val asciidoctorjVersion = "2.5.7"
 val jsoupVersion = "1.15.3"
-val deeplJavaVersion = "0.2.0"
+val deeplJavaVersion = "0.2.1"
 val assertJVersion = "3.23.1"
 
 dependencies {
