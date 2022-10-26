@@ -24,11 +24,11 @@ The application can be packaged using following command:
 ./gradlew quarkusBuild -Dquarkus.package.type=uber-jar
 ```
 
-It produces the `quarkus-adoc-po-translator-runner.jar` file in the `build` directory.
+It produces the `doc-l10n-kit-runner.jar` file in the `build` directory.
 
 ## Configuration
 
-place application.yml to `<quarkus-adoc-po-translator working directory>/config/application.yml`
+place application.yml to `<doc-l10n-kit working directory>/config/application.yml`
 
 #### application.yml
 
@@ -46,6 +46,6 @@ translator:
 uber-jar
 
 ```
-java -jar quarkus-adoc-po-translator.jar translate [<path to source po file>...] \
+java -jar doc-l10n-kit-runner.jar translate [<path to source po file>...] \
 [--srcLang <source language>] [--dstLang <destination language>]
 ```

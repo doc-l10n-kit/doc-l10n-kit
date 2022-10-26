@@ -18,9 +18,10 @@ val jgettextVersion = "0.15.1"
 val asciidoctorjVersion = "2.5.7"
 val jsoupVersion = "1.15.3"
 val deeplJavaVersion = "0.2.0"
+val assertJVersion = "3.23.1"
 
 dependencies {
-    implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:2.8.2.Final"))
+    implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:2.9.2.Final"))
     implementation("io.quarkus:quarkus-rest-client-jackson")
     implementation("io.quarkus:quarkus-picocli")
     implementation("io.quarkus:quarkus-kotlin")
@@ -38,7 +39,7 @@ dependencies {
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("org.mockito:mockito-junit-jupiter")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }
 
 group = "net.sharplab.translator"
@@ -50,7 +51,7 @@ java {
 }
 
 quarkus {
-    setFinalName("quarkus-adoc-po-translator")
+    setFinalName("doc-l10n-kit")
 }
 
 allOpen {
