@@ -38,6 +38,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/quarkus-adoc-po-translator-runner.jar
-          asset_name: quarkus-adoc-po-translator-runner.jar
+          asset_path: ./build/doc-l10n-kit-runner.jar
+          asset_name: doc-l10n-kit-runner.jar
           asset_content_type: application/java-archive
