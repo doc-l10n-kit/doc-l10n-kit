@@ -20,7 +20,7 @@ val jgettextVersion = "0.15.1"
 val asciidoctorjVersion = "2.5.7"
 val jsoupVersion = "1.15.3"
 val deeplJavaVersion = "1.0.1"
-val assertJVersion = "3.23.1"
+val assertJVersion = "3.24.2"
 
 dependencies {
     implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
