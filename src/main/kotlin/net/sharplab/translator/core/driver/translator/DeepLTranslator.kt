@@ -11,7 +11,6 @@ class DeepLTranslator(apiKey: String) : Translator {
 
     init {
         val translatorOptions = TranslatorOptions()
-        translatorOptions.serverUrl = "https://api.deepl.com/"
         deepLApi = com.deepl.api.Translator(apiKey,translatorOptions)
     }
 
