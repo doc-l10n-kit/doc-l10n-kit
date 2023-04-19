@@ -17,12 +17,14 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
     override fun translate(poFile: PoFile, srcLang: String, dstLang: String, isAsciidoctor: Boolean): PoFile {
         val messages = poFile.messages
         val translationTargets = messages.filter{ requiresTranslation(it)}
+        val messagesToErase = messages.filter{ requiresTranslatedMessageErasing(it)}
 
         val blogHeaderMessages = translationTargets.filter { isBlogHeader(it) }
         val nonBlogHeaderMessages = translationTargets.filterNot { isBlogHeader(it) }
 
         translateBlogHeaders(blogHeaderMessages, srcLang, dstLang)
         translateMessages(nonBlogHeaderMessages, srcLang, dstLang, isAsciidoctor)
+        eraseTranslatedMessage(messagesToErase)
 
         return PoFile(messages)
     }
@@ -84,6 +86,13 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
         return replaced
     }
 
+    private fun eraseTranslatedMessage(messages: List<PoMessage>){
+        messages.forEach{
+            it.messageString = ""
+            it.fuzzy = false
+        }
+    }
+
     private fun requiresTranslation(message: PoMessage): Boolean{
         if(message.messageString.isNotEmpty()){
             return false
@@ -92,6 +101,14 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
             MessageType.DelimitedBlock -> false
             MessageType.TargetForMacroImage -> false
             else -> true
+        }
+    }
+
+    private fun requiresTranslatedMessageErasing(message: PoMessage): Boolean{
+        return when(message.type){
+            MessageType.DelimitedBlock -> true
+            MessageType.TargetForMacroImage -> true
+            else -> false
         }
     }
 
