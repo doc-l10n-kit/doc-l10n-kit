@@ -17,7 +17,7 @@ val docl10nkitVersion: String by project
 
 val deepl4jVersion = "0.1.2.RELEASE"
 val jgettextVersion = "0.15.1"
-val asciidoctorjVersion = "2.5.7"
+val asciidoctorjVersion = "2.5.8"
 val jsoupVersion = "1.15.3"
 val deeplJavaVersion = "1.0.1"
 val assertJVersion = "3.24.2"
