@@ -14,7 +14,7 @@ class AsciidoctorMessageProcessor {
         val html = asciidoc.convert()
         val doc = Jsoup.parseBodyFragment(html)
         return when (val first = doc.body().children().first()) {
-            null -> ""
+            null -> message
             else -> first.children().html()
         }
     }

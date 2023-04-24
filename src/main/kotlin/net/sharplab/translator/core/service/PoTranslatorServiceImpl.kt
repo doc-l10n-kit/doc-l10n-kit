@@ -94,12 +94,41 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
     }
 
     private fun requiresTranslation(message: PoMessage): Boolean{
+        if(message.messageId.isEmpty()){
+            return false
+        }
         if(message.messageString.isNotEmpty()){
             return false
         }
         return when(message.type){
             MessageType.DelimitedBlock -> false
             MessageType.TargetForMacroImage -> false
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_CATEGORIES -> false
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_CATEGORIES -> false
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_CATEGORIES -> false
+            MessageType.YAML_HASH_VALUE_CATEGORIES_CAT_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_TYPE -> false
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_FILENAME -> false
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_URL -> false
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_TYPE -> false
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_FILENAME -> false
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_URL -> false
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_TYPE -> false
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_FILENAME -> false
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_URL -> false
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_TYPE -> false
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_FILENAME -> false
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_URL -> false
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_ID -> false
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_TYPE -> false
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME -> false
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_URL -> false
+
+            MessageType.YAML_HASH_VALUE_CATEGORIES_GUIDES_URL -> false
             else -> true
         }
     }
@@ -108,6 +137,32 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
         return when(message.type){
             MessageType.DelimitedBlock -> true
             MessageType.TargetForMacroImage -> true
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_CATEGORIES -> true
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_CATEGORIES -> true
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_CATEGORIES -> true
+            MessageType.YAML_HASH_VALUE_CATEGORIES_CAT_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_TYPE -> true
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_FILENAME -> true
+            MessageType.YAML_HASH_VALUE_TYPES_CONCEPTS_URL -> true
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_TYPE -> true
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_FILENAME -> true
+            MessageType.YAML_HASH_VALUE_TYPES_GUIDE_URL -> true
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_TYPE -> true
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_FILENAME -> true
+            MessageType.YAML_HASH_VALUE_TYPES_REFERENCE_URL -> true
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_TYPE -> true
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_FILENAME -> true
+            MessageType.YAML_HASH_VALUE_TYPES_HOWTO_URL -> true
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_ID -> true
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_TYPE -> true
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME -> true
+            MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_URL -> true
+
+            MessageType.YAML_HASH_VALUE_CATEGORIES_GUIDES_URL -> true
             else -> false
         }
     }

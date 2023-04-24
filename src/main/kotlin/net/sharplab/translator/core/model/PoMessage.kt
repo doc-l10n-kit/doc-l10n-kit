@@ -11,21 +11,9 @@ class PoMessage{
         this.message = message
     }
 
-    val type: MessageType
+    val type: String
         get(){
-            return when {
-                checkMessageType("type: Title =") -> MessageType.Title1
-                checkMessageType("type: Title ==") -> MessageType.Title2
-                checkMessageType("type: Title ===") -> MessageType.Title3
-                checkMessageType("type: Plain Text") -> MessageType.PlainText
-                checkMessageType("type: delimited block =") -> MessageType.DelimitedBlock1
-                checkMessageType("type: delimited block ==") -> MessageType.DelimitedBlock2
-                checkMessageType("type: delimited block ===") -> MessageType.DelimitedBlock3
-                checkMessageType("type: delimited block -") -> MessageType.DelimitedBlock
-                checkMessageType("type: Table") -> MessageType.Table
-                checkMessageType("type: Target for macro image") -> MessageType.TargetForMacroImage
-                else -> MessageType.None
-            }
+            return this.message.extractedComments.firstOrNull{ it.startsWith("type:") }?: MessageType.None
         }
 
     val messageId: String
@@ -42,8 +30,4 @@ class PoMessage{
         set(value){
             message.isFuzzy = value
         }
-
-    private fun checkMessageType(type: String): Boolean {
-        return this.message.extractedComments.any { comment -> comment == type }
-    }
 }

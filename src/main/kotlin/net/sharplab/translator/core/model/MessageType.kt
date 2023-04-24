@@ -1,15 +1,58 @@
 package net.sharplab.translator.core.model
 
-enum class MessageType {
-    Title1,
-    Title2,
-    Title3,
-    PlainText,
-    DelimitedBlock1,
-    DelimitedBlock2,
-    DelimitedBlock3,
-    DelimitedBlock,
-    TargetForMacroImage,
-    Table,
-    None
+class MessageType {
+    companion object{
+        const val None = ""
+        const val Title1 = "type: Title = "
+        const val Title2 = "type: Title =="
+        const val Title3 = "type: Title ==="
+        const val PlainText = "type: Plain Text"
+        const val DelimitedBlock1 = "type: delimited block ="
+        const val DelimitedBlock2 = "type: delimited block =="
+        const val DelimitedBlock3 = "type: delimited block ==="
+        const val DelimitedBlock = "type: delimited block -"
+        const val TargetForMacroImage = "type: Target for macro image"
+        const val Table = "type: Table"
+
+        const val YAML_HASH_VALUE_TYPES_GUIDE_CATEGORIES = "type: Hash Value: types guide categories"
+        const val YAML_HASH_VALUE_CATEGORIES_CATEGORY = "type: Hash Value: categories category"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_CATEGORIES = "type: Hash Value: types reference categories"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_CATEGORIES = "type: Hash Value: types tutorial categories"
+        const val YAML_HASH_VALUE_CATEGORIES_CAT_ID = "type: Hash Value: categories cat-id"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_ID = "type: Hash Value: types concepts id"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_TYPE = "type: Hash Value: types concepts type"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_TITLE = "type: Hash Value: types concepts title"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_SUMMARY = "type: Hash Value: types concepts summary"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_FILENAME = "type: Hash Value: types concepts filename"
+        const val YAML_HASH_VALUE_TYPES_CONCEPTS_URL = "type: Hash Value: types concepts url"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_ID = "type: Hash Value: types guide id"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_TYPE = "type: Hash Value: types guide type"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_TITLE = "type: Hash Value: types guide title"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_SUMMARY = "type: Hash Value: types guide summary"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_FILENAME = "type: Hash Value: types guide filename"
+        const val YAML_HASH_VALUE_TYPES_GUIDE_URL = "type: Hash Value: types guide url"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_ID = "type: Hash Value: types reference id"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_TYPE = "type: Hash Value: types reference type"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_TITLE = "type: Hash Value: types reference title"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_SUMMARY = "type: Hash Value: types reference summary"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_FILENAME = "type: Hash Value: types reference filename"
+        const val YAML_HASH_VALUE_TYPES_REFERENCE_URL = "type: Hash Value: types reference url"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_ID = "type: Hash Value: types howto id"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_TYPE = "type: Hash Value: types howto type"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_TITLE = "type: Hash Value: types howto title"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_SUMMARY = "type: Hash Value: types howto summary"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_FILENAME = "type: Hash Value: types howto filename"
+        const val YAML_HASH_VALUE_TYPES_HOWTO_URL = "type: Hash Value: types howto url"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_ID = "type: Hash Value: types tutorial id"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_TYPE = "type: Hash Value: types tutorial type"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_TITLE = "type: Hash Value: types tutorial title"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_SUMMARY = "type: Hash Value: types tutorial summary"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME = "type: Hash Value: types tutorial filename"
+        const val YAML_HASH_VALUE_TYPES_TUTORIAL_URL = "type: Hash Value: types tutorial url"
+
+        const val YAML_HASH_VALUE_CATEGORIES_GUIDES_URL = "type: Hash Value: categories guides url"
+        const val YAML_HASH_VALUE_CATEGORIES_GUIDES_TITLE = "type: Hash Value: categories guides title"
+        const val YAML_HASH_VALUE_CATEGORIES_GUIDES_DESCRIPTION = "type: Hash Value: categories guides description"
+
+    }
 }
