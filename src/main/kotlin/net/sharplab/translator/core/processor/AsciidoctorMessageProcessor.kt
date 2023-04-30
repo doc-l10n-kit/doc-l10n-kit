@@ -1,17 +1,29 @@
 package net.sharplab.translator.core.processor
 
-import org.asciidoctor.jruby.internal.JRubyAsciidoctor
+import org.asciidoctor.Asciidoctor
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.jsoup.Jsoup
+import java.nio.file.Files
 
 class AsciidoctorMessageProcessor {
 
-    private val asciidoctor = JRubyAsciidoctor()
+    private val asciidoctor = Asciidoctor.Factory.create()
+    private val tempDir = Files.createTempDirectory("asciidoc-templates-")
+
+    init {
+        val inputStream = this.javaClass.classLoader.getResourceAsStream("asciidoc-templates/inline_anchor.html.erb")
+        val inlineAnchorTemplateFile = tempDir.toFile().resolve("inline_anchor.html.erb")
+        Files.copy(inputStream!!, inlineAnchorTemplateFile.toPath())
+    }
 
     fun preProcess(message: String): String {
-        val options = HashMap<String, Any>()
-        options["backend"] = "html"
-        val asciidoc = asciidoctor.load(message, options)
-        val html = asciidoc.convert()
+        val options = Options.builder()
+            .templateDirs(tempDir.toFile())
+            .build()
+        val document = asciidoctor.load(message, options)
+        document.attributes["relfilesuffix"] = ".adoc"
+        val html = document.convert()
         val doc = Jsoup.parseBodyFragment(html)
         return when (val first = doc.body().children().first()) {
             null -> message

@@ -12,35 +12,75 @@ class LinkTagPostProcessor : TagPostProcessor{
 
     private fun replaceLink(element: Element) {
         if(element.tagName() == "a"){
-            if(element.attr("class") == "bare"){
+            if (element.attr("class") == "bare") {
                 val url = element.attr("href")
                 val linkText = " %s ".format(url)
                 element.replaceWith(TextNode(linkText))
             }
-            else {
-                val url = element.attr("href")
-                val text = element.text()
-                val attrs = element.attributes().filterNot { attr -> attr.key == "href" }.filterNot { attr -> attr.key == "rel" && attr.value == "noopener" }
-                val attrsText: String = attrs.joinToString(separator = ", ")
-                var linkText = when {
-                    attrs.isEmpty() -> "link:%s[%s]".format(url, text)
-                    else -> "link:%s[%s, %s]".format(url, text, attrsText)
-                }
+            when(element.attr("data-doc-l10n-kit-type")){
+                "xref" -> {
+                    val target = when(element.attr("data-doc-l10n-kit-target").startsWith("#")){
+                        true -> element.attr("data-doc-l10n-kit-target").substring(1)
+                        else -> element.attr("data-doc-l10n-kit-target")
+                    }
+                    val text = element.text()
+                    val attrs = element.attributes()
+                        .filterNot { attr -> attr.key == "data-doc-l10n-kit-type" }
+                        .filterNot { attr -> attr.key == "data-doc-l10n-kit-target" }
+                        .filterNot { attr -> attr.key == "rel" && attr.value == "noopener" }
+                    val attrsText: String = attrs.joinToString(separator = ", ")
+                    var linkText = when(text.isNullOrEmpty()){
+                        true -> "<<%s>>".format(target)
+                        false -> when(attrs.isEmpty()){
+                            true -> "xref:%s[%s]".format(target, text)
+                            false -> "xref:%s[%s, %s]".format(target, text, attrsText)
+                        }
+                    }
 
-                val prev : Node? = element.previousSibling()
-                val next : Node? = element.nextSibling()
-                val isPrevExists = prev != null
-                val isNextExists = next != null
-                val isPrevSpaced= prev is TextNode && prev.text().endsWith(" ")
-                val isNextSpaced= next is TextNode && next.text().startsWith(" ")
+                    val prev : Node? = element.previousSibling()
+                    val next : Node? = element.nextSibling()
+                    val isPrevExists = prev != null
+                    val isNextExists = next != null
+                    val isPrevSpaced= prev is TextNode && prev.text().endsWith(" ")
+                    val isNextSpaced= next is TextNode && next.text().startsWith(" ")
 
-                if(isPrevExists && !isPrevSpaced){
-                    linkText = " $linkText"
+                    if(isPrevExists && !isPrevSpaced){
+                        linkText = " $linkText"
+                    }
+                    if(isNextExists && !isNextSpaced){
+                        linkText = "$linkText "
+                    }
+                    element.replaceWith(TextNode(linkText))
                 }
-                if(isNextExists && !isNextSpaced){
-                    linkText = "$linkText "
+                else -> {
+                    val target = element.attr("data-doc-l10n-kit-target")
+                    val text = element.text()
+                    val attrs = element.attributes()
+                        .filterNot { attr -> attr.key == "data-doc-l10n-kit-type" }
+                        .filterNot { attr -> attr.key == "data-doc-l10n-kit-target" }
+                        .filterNot { attr -> attr.key == "rel" && attr.value == "noopener" }
+                    val attrsText: String = attrs.joinToString(separator = ", ")
+                    var linkText = when {
+                        target == text -> target
+                        attrs.isEmpty() -> "link:%s[%s]".format(target, text)
+                        else -> "link:%s[%s, %s]".format(target, text, attrsText)
+                    }
+
+                    val prev : Node? = element.previousSibling()
+                    val next : Node? = element.nextSibling()
+                    val isPrevExists = prev != null
+                    val isNextExists = next != null
+                    val isPrevSpaced= prev is TextNode && prev.text().endsWith(" ")
+                    val isNextSpaced= next is TextNode && next.text().startsWith(" ")
+
+                    if(isPrevExists && !isPrevSpaced){
+                        linkText = " $linkText"
+                    }
+                    if(isNextExists && !isNextSpaced){
+                        linkText = "$linkText "
+                    }
+                    element.replaceWith(TextNode(linkText))
                 }
-                element.replaceWith(TextNode(linkText))
             }
         }
         element.children().forEach(this::replaceLink)

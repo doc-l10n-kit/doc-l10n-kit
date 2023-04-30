@@ -23,7 +23,7 @@ class DecorationTagPostProcessor(private val tagName: String, private val openQu
                 else -> openQuote
             }
             val closeStr = when {
-                spacingIsRequiredForNext -> " $openQuote"
+                spacingIsRequiredForNext -> "$closeQuote "
                 else -> closeQuote
             }
             element.replaceWith(TextNode(openStr + element.html() + closeStr))
