@@ -10,7 +10,7 @@ import javax.enterprise.inject.Produces
 class DocL10NKitConfig(private val asciiDocPoTranslatorSetting: DocL10NKitSetting) {
 
     @Produces
-    fun translator(): Translator
+    fun deeplTranslator(): DeepLTranslator
     {
         val deepLApiKey = asciiDocPoTranslatorSetting.deepLApiKey
         return DeepLTranslator(deepLApiKey.get())

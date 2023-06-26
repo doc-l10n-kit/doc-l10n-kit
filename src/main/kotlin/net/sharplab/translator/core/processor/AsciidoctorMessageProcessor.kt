@@ -1,7 +1,6 @@
 package net.sharplab.translator.core.processor
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.Attributes
 import org.asciidoctor.Options
 import org.jsoup.Jsoup
 import java.nio.file.Files
@@ -34,14 +33,14 @@ class AsciidoctorMessageProcessor {
     fun postProcess(message: String): String {
         val doc = Jsoup.parseBodyFragment(message)
         val body = doc.body()
+        LinkTagPostProcessor().postProcess(body)
+        ImageTagPostProcessor().postProcess(body)
         DecorationTagPostProcessor("em", "_", "_").postProcess(body)
         DecorationTagPostProcessor("strong", "*", "*").postProcess(body)
-        DecorationTagPostProcessor("code", "`", "`").postProcess(body)
         DecorationTagPostProcessor("monospace", "`", "`").postProcess(body)
         DecorationTagPostProcessor("superscript", "^", "^").postProcess(body)
         DecorationTagPostProcessor("subscript", "~", "~").postProcess(body)
-        LinkTagPostProcessor().postProcess(body)
-        ImageTagPostProcessor().postProcess(body)
+        DecorationTagPostProcessor("code", "`", "`").postProcess(body)
         val wholeText = body.wholeText()
         return unescapeCharacterReference(wholeText)
     }

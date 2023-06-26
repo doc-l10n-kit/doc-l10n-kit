@@ -1,9 +1,7 @@
 package net.sharplab.translator.core.driver.translator
 
-import com.deepl.api.DeepLException
-import com.deepl.api.TextResult
-import com.deepl.api.TextTranslationOptions
-import com.deepl.api.TranslatorOptions
+import com.deepl.api.*
+import java.io.File
 
 class DeepLTranslator(apiKey: String) : Translator {
 
@@ -11,10 +9,10 @@ class DeepLTranslator(apiKey: String) : Translator {
 
     init {
         val translatorOptions = TranslatorOptions()
-        deepLApi = com.deepl.api.Translator(apiKey,translatorOptions)
+        deepLApi = Translator(apiKey,translatorOptions)
     }
 
-    override fun translate(texts: List<String>, srcLang: String, dstLang: String): List<String> {
+    override fun translate(texts: List<String>, srcLang: String, dstLang: String, glossaryId: String?): List<String> {
         if (texts.isEmpty()) {
             return emptyList()
         }
@@ -24,11 +22,24 @@ class DeepLTranslator(apiKey: String) : Translator {
             textTranslatorOptions.nonSplittingTags = INLINE_ELEMENT_NAMES
             textTranslatorOptions.ignoreTags = IGNORE_ELEMENT_NAMES
             textTranslatorOptions.tagHandling = "xml"
+            textTranslatorOptions.glossaryId = glossaryId
             translations = deepLApi.translateText(texts, srcLang, dstLang, textTranslatorOptions)
         } catch (e: DeepLException) {
             throw DeepLTranslatorException("DeepL error is thrown", e)
         }
         return translations.map{ it.text }
+    }
+
+    fun createGlossary(name: String, srcLang: String, dstLang: String, csvFile: File): GlossaryInfo{
+        return deepLApi.createGlossaryFromCsv(name, srcLang, dstLang, csvFile)
+    }
+
+    fun listGlossaries() : List<GlossaryInfo> {
+        return deepLApi.listGlossaries()
+    }
+
+    fun removeGlossary(glossaryId: String){
+        deepLApi.deleteGlossary(glossaryId)
     }
 
     companion object {

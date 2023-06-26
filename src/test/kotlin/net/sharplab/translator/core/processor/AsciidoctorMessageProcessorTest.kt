@@ -125,6 +125,18 @@ internal class AsciidoctorMessageProcessorTest {
     }
 
     @Test
+    fun preProcess_combinedTags(){
+        val result = target.preProcess("`https://example.com`")
+        assertThat(result).isEqualTo("<code> <a data-doc-l10n-kit-type=\"link\" data-doc-l10n-kit-target=\"https://example.com\">https://example.com</a></code>")
+    }
+
+    @Test
+    fun postProcess_combinedTags(){
+        val result = target.postProcess("<code> <a data-doc-l10n-kit-type=\"link\" data-doc-l10n-kit-target=\"https://example.com\">https://example.com</a></code>")
+        assertThat(result).isEqualTo("`https://example.com`")
+    }
+
+    @Test
     fun preProcess(){
         val result = target.preProcess("(>_<)")
         assertThat(result).isEqualTo("(&gt;_&lt;)")
