@@ -1,11 +1,11 @@
 package net.sharplab.translator.core.driver.translator
 
 import com.deepl.api.*
-import java.io.File
+import java.nio.file.Path
 
 class DeepLTranslator(apiKey: String) : Translator {
 
-    private val deepLApi : com.deepl.api.Translator;
+    private val deepLApi : com.deepl.api.Translator
 
     init {
         val translatorOptions = TranslatorOptions()
@@ -30,8 +30,8 @@ class DeepLTranslator(apiKey: String) : Translator {
         return translations.map{ it.text }
     }
 
-    fun createGlossary(name: String, srcLang: String, dstLang: String, csvFile: File): GlossaryInfo{
-        return deepLApi.createGlossaryFromCsv(name, srcLang, dstLang, csvFile)
+    fun createGlossary(name: String, srcLang: String, dstLang: String, csvFile: Path): GlossaryInfo{
+        return deepLApi.createGlossaryFromCsv(name, srcLang, dstLang, csvFile.toFile())
     }
 
     fun listGlossaries() : List<GlossaryInfo> {

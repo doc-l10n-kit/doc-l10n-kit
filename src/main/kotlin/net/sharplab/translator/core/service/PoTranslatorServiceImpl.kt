@@ -1,9 +1,9 @@
 package net.sharplab.translator.core.service
 
 import net.sharplab.translator.core.driver.translator.Translator
-import net.sharplab.translator.core.model.MessageType
-import net.sharplab.translator.core.model.PoFile
-import net.sharplab.translator.core.model.PoMessage
+import net.sharplab.translator.core.model.po.MessageType
+import net.sharplab.translator.core.model.po.Po
+import net.sharplab.translator.core.model.po.PoMessage
 import net.sharplab.translator.core.processor.AsciidoctorMessageProcessor
 import org.jboss.logging.Logger
 import javax.enterprise.context.Dependent
@@ -15,24 +15,24 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
     private val messageProcessor = AsciidoctorMessageProcessor()
 
     override fun translate(
-        poFile: PoFile,
-        srcLang: String,
-        dstLang: String,
-        isAsciidoctor: Boolean,
-        glossaryId: String?
-    ): PoFile {
-        val messages = poFile.messages
+            po: Po,
+            source: String,
+            target: String,
+            isAsciidoctor: Boolean,
+            glossaryId: String?
+    ): Po {
+        val messages = po.messages
         val translationTargets = messages.filter{ requiresTranslation(it)}
         val messagesToErase = messages.filter{ requiresTranslatedMessageErasing(it)}
 
         val blogHeaderMessages = translationTargets.filter { isBlogHeader(it) }
         val nonBlogHeaderMessages = translationTargets.filterNot { isBlogHeader(it) }
 
-        translateBlogHeaders(blogHeaderMessages, srcLang, dstLang, glossaryId)
-        translateMessages(nonBlogHeaderMessages, srcLang, dstLang, isAsciidoctor, glossaryId)
+        translateBlogHeaders(blogHeaderMessages, source, target, glossaryId)
+        translateMessages(nonBlogHeaderMessages, source, target, isAsciidoctor, glossaryId)
         eraseTranslatedMessage(messagesToErase)
 
-        return PoFile(messages)
+        return Po(target, messages)
     }
 
     private fun translate(messages: List<String>, srcLang: String, dstLang: String, isAsciidoctor: Boolean, glossaryId: String? = null): List<String> {

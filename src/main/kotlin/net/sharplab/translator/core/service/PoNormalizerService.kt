@@ -1,8 +1,8 @@
 package net.sharplab.translator.core.service
 
-import net.sharplab.translator.core.model.PoFile
+import net.sharplab.translator.core.model.po.Po
 
 interface PoNormalizerService {
 
-    fun normalize(poFile: PoFile): PoFile
+    fun normalize(po: Po): Po
 }

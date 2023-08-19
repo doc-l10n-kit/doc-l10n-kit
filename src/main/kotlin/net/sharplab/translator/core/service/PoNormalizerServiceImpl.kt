@@ -1,9 +1,6 @@
 package net.sharplab.translator.core.service
 
-import net.sharplab.translator.core.model.PoFile
-import net.sharplab.translator.core.processor.DecorationTagPostProcessor
-import net.sharplab.translator.core.processor.ImageTagPostProcessor
-import net.sharplab.translator.core.processor.LinkTagPostProcessor
+import net.sharplab.translator.core.model.po.Po
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -42,7 +39,7 @@ class PoNormalizerServiceImpl : PoNormalizerService {
 //        return element.text()
 //    }
 
-    override fun normalize(poFile: PoFile): PoFile {
+    override fun normalize(po: Po): Po {
         val str = ""
         val htmlString = toHtmlString(str)
         TODO("")

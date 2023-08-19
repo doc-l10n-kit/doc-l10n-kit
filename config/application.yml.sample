@@ -1,0 +1,6 @@
+translator:
+  deepL:
+    apiKey: <PUT YOUR API KEY HERE>
+  language:
+    source: en   # default source language
+    target: ja   # default target language

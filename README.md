@@ -2,7 +2,7 @@
 
 [![Actions Status](https://github.com/doc-l10n-kit/doc-l10n-kit/workflows/CI/badge.svg)](https://github.com/doc-l10n-kit/doc-l10n-kit/actions)
 
-doc-l10n-kit is a set of utilities to translate .po files.
+doc-l10n-kit is a set of utilities to translate .asciidoc files.
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
@@ -37,15 +37,23 @@ translator:
   deepL:
     apiKey: <put your api key here>
   language:
-    source: en        # default source language
-    destination: ja   # default destination language
+    source: en   # default source language
+    target: ja   # default target language
 ```
 
 ## Execution
 
-uber-jar
-
+### extract sentences from an original asciidoc file to a .po file
 ```
-java -jar doc-l10n-kit-runner.jar translate [<path to source po file>...] \
-[--srcLang <source language>] [--dstLang <destination language>]
+java -jar doc-l10n-kit-runner.jar asciidoc extract --asciidoc=<asciidoc file path> --po=<po file path>
+```
+
+### machine translate .po file
+```
+java -jar doc-l10n-kit-runner.jar po machine-translate --po=<po file path> --source=<source language> --target=<target language>
+```
+
+### translate asciidoc file by writing back translated sentences to the asciidoc file
+```
+java -jar doc-l10n-kit-runner.jar asciidoc translate --po=<po file path> --sourceAsciidoc=<asciidoc file path> --targetAsciidoc=<asciidoc file path>
 ```
