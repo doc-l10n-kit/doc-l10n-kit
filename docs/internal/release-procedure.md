@@ -14,8 +14,8 @@ git checkout -b release-<version>
 
 gradle.properties
 ```
-quarkusAdocPoTranslatorVersion=<version>.RELEASE
-latestReleasedQuarkusAdocPoTranslatorVersion=<version>.RELEASE
+docl10nkitVersion=<version>.RELEASE
+latestReleasedDocl10nkitVersion=<version>.RELEASE
 ```
 
 ##### Create a release commit
@@ -80,8 +80,8 @@ git checkout -b <new version>-development
 
 gradle.properties
 ```
-quarkusAdocPoTranslatorVersion=<new version>-SNAPSHOT
-latestReleasedQuarkusAdocPoTranslatorVersion=<version>.RELEASE
+docl10nkitVersion=<new version>-SNAPSHOT
+latestReleasedDocl10nkitVersion=<version>.RELEASE
 ```
 
 ##### Commit the change
