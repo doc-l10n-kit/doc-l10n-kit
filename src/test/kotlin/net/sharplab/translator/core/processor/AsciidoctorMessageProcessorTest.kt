@@ -144,7 +144,7 @@ internal class AsciidoctorMessageProcessorTest {
 
     @Test
     fun postProcess(){
-        val result = target.postProcess("<code>(&gt;_&lt;)</code>")
-        assertThat(result).isEqualTo(" `(>_<)` ")
+        val result = target.postProcess("previous word<code>(&gt;_&lt;)</code>next word")
+        assertThat(result).isEqualTo("previous word `(>_<)` next word")
     }
 }

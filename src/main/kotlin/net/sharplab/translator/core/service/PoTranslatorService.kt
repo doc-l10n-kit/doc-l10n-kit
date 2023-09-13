@@ -1,9 +1,9 @@
 package net.sharplab.translator.core.service
 
-import net.sharplab.translator.core.model.PoFile
+import net.sharplab.translator.core.model.po.Po
 
 interface PoTranslatorService{
 
-    fun translate(poFile: PoFile, srcLang: String, dstLang: String, isAsciidoctor: Boolean = true, glossaryId: String? = null): PoFile
+    fun translate(po: Po, source: String, target: String, isAsciidoctor: Boolean = true, glossaryId: String? = null): Po
 
 }

@@ -1,4 +1,4 @@
-package net.sharplab.translator.core.model
+package net.sharplab.translator.core.model.po
 
 class MessageType {
     companion object{
