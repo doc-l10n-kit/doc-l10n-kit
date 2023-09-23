@@ -43,17 +43,28 @@ translator:
 
 ## Execution
 
-### extract sentences from an original asciidoc file to a .po file
-```
-java -jar doc-l10n-kit-runner.jar asciidoc extract --asciidoc=<asciidoc file path> --po=<po file path>
-```
-
 ### machine translate .po file
 ```
 java -jar doc-l10n-kit-runner.jar po machine-translate --po=<po file path> --source=<source language> --target=<target language>
 ```
 
-### translate asciidoc file by writing back translated sentences to the asciidoc file
+### Apply translation memory to .po file
 ```
-java -jar doc-l10n-kit-runner.jar asciidoc translate --po=<po file path> --sourceAsciidoc=<asciidoc file path> --targetAsciidoc=<asciidoc file path>
+java -jar doc-l10n-kit-runner.jar po apply-tmx --tmx=<fmx file path> --po=<po file path>
 ```
+
+### Create a new glossary
+```
+java -jar doc-l10n-kit-runner.jar glossary create --name=<name> --source=<source language code> --target=<target language code> <glossary CSV file path>
+```
+
+### list glossaries
+```
+java -jar doc-l10n-kit-runner.jar glossary list
+```
+
+### Delete a glossary
+```
+java -jar doc-l10n-kit-runner.jar glossary delete --glossaryId=<glossary id>
+```
+

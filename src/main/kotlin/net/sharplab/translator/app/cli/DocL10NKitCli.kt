@@ -11,77 +11,16 @@ import picocli.CommandLine
 import picocli.CommandLine.IFactory
 import java.nio.file.Path
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 @QuarkusMain
-@CommandLine.Command(name = "doc-l10n-kit", subcommands = [DocL10NKitCli.AsciidocCommand::class, DocL10NKitCli.PoCommand::class, DocL10NKitCli.GlossaryCommand::class])
+@CommandLine.Command(name = "doc-l10n-kit", subcommands = [DocL10NKitCli.PoCommand::class, DocL10NKitCli.GlossaryCommand::class])
 class DocL10NKitCli : QuarkusApplication {
 
     @Inject
     lateinit var factory: IFactory
 
-    @CommandLine.Command(name = "asciidoc", subcommands = [AsciidocCommand.ExtractCommand::class, AsciidocCommand.TranslateCommand::class])
-    class AsciidocCommand() {
-
-        @CommandLine.Command(name = "extract")
-        class ExtractCommand(private val docL10nKitAppService: DocL10NKitAppService) : Runnable {
-
-            private val logger = LoggerFactory.getLogger(this::class.java)
-
-            @CommandLine.Option(order = 1, names = ["--asciidoc"], description = ["asciidoc path"], required = true)
-            private lateinit var asciidoc: Path
-            @CommandLine.Option(order = 2, names = ["--po"], description = ["po path"], required = true)
-            private lateinit var po: Path
-            @CommandLine.Option(order = 3, names = ["--source"], description = ["source language"])
-            private var source: String? = null
-            @CommandLine.Option(order = 4, names = ["--target"], description = ["target language"])
-            private var target: String? = null
-            @CommandLine.Option(order = 9, names = ["--help", "-h"], description = ["print help"], usageHelp = true)
-            private var help = false
-
-            override fun run() {
-                try{
-                    docL10nKitAppService.extract(asciidoc, po, source, target)
-                }
-                catch (e: DocL10NKitAppException){
-                    logger.error("doc-l10n-kit failed with error: ${e.message}", e)
-                }
-                catch (e: Exception){
-                    logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
-                }
-            }
-        }
-
-        @CommandLine.Command(name = "translate")
-        class TranslateCommand(private val docL10nKitAppService: DocL10NKitAppService) : Runnable {
-
-            private val logger = LoggerFactory.getLogger(this::class.java)
-
-            @CommandLine.Option(order = 1, names = ["--po"], description = ["po path"], required = true)
-            private lateinit var po: Path
-            @CommandLine.Option(order = 2, names = ["--sourceAsciidoc"], description = ["source asciidoc path"], required = true)
-            private lateinit var sourceAsciidoc: Path
-            @CommandLine.Option(order = 2, names = ["--targetAsciidoc"], description = ["target asciidoc path"], required = true)
-            private lateinit var targetAsciidoc: Path
-            @CommandLine.Option(order = 9, names = ["--help", "-h"], description = ["print help"], usageHelp = true)
-            private var help = false
-
-            override fun run() {
-                try{
-                    docL10nKitAppService.translateAsciidoc(po, sourceAsciidoc, targetAsciidoc)
-                }
-                catch (e: DocL10NKitAppException){
-                    logger.error("doc-l10n-kit failed with error: ${e.message}", e)
-                }
-                catch (e: Exception){
-                    logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
-                }
-            }
-
-        }
-
-    }
-
-    @CommandLine.Command(name = "po", subcommands = [PoCommand.MachineTranslateCommand::class, PoCommand.NormalizeCommand::class])
+    @CommandLine.Command(name = "po", subcommands = [PoCommand.MachineTranslateCommand::class, PoCommand.ApplyTmxCommand::class, PoCommand.NormalizeCommand::class])
     class PoCommand() {
         @CommandLine.Command(name = "machine-translate")
         class MachineTranslateCommand(private val docL10nKitAppService: DocL10NKitAppService, private val docL10nKitSetting: DocL10NKitSetting) : Runnable {
@@ -116,6 +55,33 @@ class DocL10NKitCli : QuarkusApplication {
                 }
                 catch (e: Exception){
                     logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
+                }
+            }
+        }
+
+        @CommandLine.Command(name = "apply-tmx")
+        class ApplyTmxCommand(private val docL10nKitAppService: DocL10NKitAppService, private val docL10nKitSetting: DocL10NKitSetting) : Runnable {
+
+            private val logger = LoggerFactory.getLogger(this::class.java)
+
+            @CommandLine.Option(order = 1, names = ["--tmx"], description = ["tmx"])
+            private lateinit var tmx: Path
+            @CommandLine.Option(order = 2, names = ["--po"], description = ["po"])
+            private lateinit var po: Path
+            @CommandLine.Option(order = 9, names = ["--help", "-h"], description = ["print help"], usageHelp = true)
+            private var help = false
+
+            override fun run() {
+                try{
+                    docL10nKitAppService.applyTmx(tmx, po)
+                }
+                catch (e: DocL10NKitAppException){
+                    logger.error("doc-l10n-kit failed with error: ${e.message}", e)
+                }
+                catch (e: Exception){
+                    logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
                 }
             }
         }
@@ -132,12 +98,14 @@ class DocL10NKitCli : QuarkusApplication {
 
             override fun run() {
                 try{
+                    //TODO
                 }
                 catch (e: DocL10NKitAppException){
                     logger.error("doc-l10n-kit failed with error: ${e.message}", e)
                 }
                 catch (e: Exception){
                     logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
                 }
             }
 
@@ -170,8 +138,8 @@ class DocL10NKitCli : QuarkusApplication {
             override fun run() {
                 try{
                     val filePath = path?: throw IllegalArgumentException("path must be provided")
-                    val resolvedSourceLang = source ?: docL10nKitSetting.defaultSourceLang ?: throw IllegalArgumentException("source must be provided")
-                    val resolvedTargetLang = target ?: docL10nKitSetting.defaultTargetLang ?: throw IllegalArgumentException("target must be provided")
+                    val resolvedSourceLang = source ?: docL10nKitSetting.defaultSourceLang
+                    val resolvedTargetLang = target ?: docL10nKitSetting.defaultTargetLang
                     val glossary = docL10nKitAppService.createGlossary(name!!, resolvedSourceLang, resolvedTargetLang, filePath)
                     println(objectMapper.writeValueAsString(glossary))
                 }
@@ -180,6 +148,7 @@ class DocL10NKitCli : QuarkusApplication {
                 }
                 catch (e: Exception){
                     logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
                 }
             }
         }
@@ -215,6 +184,7 @@ class DocL10NKitCli : QuarkusApplication {
                 }
                 catch (e: Exception){
                     logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
                 }
             }
         }

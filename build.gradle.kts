@@ -33,6 +33,7 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy")
 
     implementation("com.deepl.api:deepl-java:${deeplJavaVersion}")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 
     implementation("org.fedorahosted.tennera:jgettext:${jgettextVersion}")
     implementation("org.asciidoctor:asciidoctorj:${asciidoctorjVersion}")
