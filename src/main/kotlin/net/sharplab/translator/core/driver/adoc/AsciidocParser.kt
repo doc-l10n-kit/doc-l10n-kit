@@ -31,6 +31,7 @@ class AsciidocParser(private val path: Path) {
     private val preprocessorDirectiveTrimmedText : String = originalText.lines().joinToString("\n") {
         when {
             it.startsWith("ifdef::") || it.startsWith("ifndef::") || it.startsWith("ifeval::") || it.startsWith("endif::") -> ""
+            it.startsWith("include::") -> "image::dummy.png[]" //replace with dummy block
             else -> it
         }
     }
@@ -202,7 +203,8 @@ class AsciidocParser(private val path: Path) {
                 }
                 is Cell -> {
                     if(!node.source.isNullOrEmpty()){
-                        sentences.add(SentenceCandidate(SentenceType.TABLE, node.source, node.sourceLocation.lineNumber))
+                        val text = node.source.replace("|", "\\"+"|")
+                        sentences.add(SentenceCandidate(SentenceType.TABLE, text, node.sourceLocation.lineNumber))
                     }
                 }
                 is org.asciidoctor.ast.List -> {

@@ -4,6 +4,7 @@ import com.deepl.api.GlossaryInfo
 import net.sharplab.translator.app.exception.DocL10NKitAppException
 import net.sharplab.translator.app.setting.DocL10NKitSetting
 import net.sharplab.translator.core.driver.po.PoDriver
+import net.sharplab.translator.core.driver.tmx.TmxDriver
 import net.sharplab.translator.core.driver.translator.DeepLTranslator
 import net.sharplab.translator.core.service.AsciidocService
 import net.sharplab.translator.core.service.PoTranslatorService
@@ -22,12 +23,13 @@ class DocL10NKitAppServiceImpl(
         private val asciidocService: AsciidocService,
         private val deepLTranslator: DeepLTranslator,
         private val poDriver: PoDriver,
+        private val tmxDriver: TmxDriver,
         private val asciiDocPoTranslatorSetting: DocL10NKitSetting) : DocL10NKitAppService {
 
     private val logger = Logger.getLogger(DocL10NKitAppServiceImpl::class.java)
 
 
-    override fun extract(asciidoc: Path, po: Path, source: String?, target: String?) {
+    override fun extract(asciidoc: Path, excludePatterns: List<String>, po: Path, source: String?, target: String?) {
         if(!asciidoc.exists()){
             throw DocL10NKitAppException("asciidoc file does not exist")
         }
@@ -41,12 +43,16 @@ class DocL10NKitAppServiceImpl(
 
         val fs: FileSystem = FileSystems.getDefault()
         val globPattern = fs.getPathMatcher("glob:**/*.adoc")
-        val excludePattern = fs.getPathMatcher("glob:**/_generated-doc/**.adoc")
 
-        val files = Files.walk(asciidoc)
+        var files = Files.walk(asciidoc)
                 .filter(globPattern::matches)
                 .filter{ !it.isDirectory() }
-                .filter{ !excludePattern.matches(it) }
+
+        excludePatterns
+                .map { fs.getPathMatcher(it) }
+                .forEach { excludePattern ->
+                    files = files.filter { file -> !excludePattern.matches(file) }
+                }
 
         files.forEach{ asciidocPath ->
             val relativeAsciidocPath = asciidocPath.relativeTo(asciidoc)
@@ -81,24 +87,24 @@ class DocL10NKitAppServiceImpl(
         }
 
         val fs: FileSystem = FileSystems.getDefault()
-        val globPattern = fs.getPathMatcher("glob:**/*.adoc")
-        val excludePattern = fs.getPathMatcher("glob:**/_generated-doc/**.adoc")
+        val globPattern = fs.getPathMatcher("glob:**/*.adoc.po")
 
-        val files = Files.walk(sourceAsciidoc)
+        val files = Files.walk(po)
                 .filter(globPattern::matches)
                 .filter{ !it.isDirectory() }
-                .filter{ !excludePattern.matches(it) }
-        files.forEach { sourceAsciidocPath ->
-            if (!targetAsciidoc.parent.exists()) {
-                Files.createDirectories(targetAsciidoc.parent)
-            }
-            val relativeAsciidocPath = sourceAsciidocPath.relativeTo(sourceAsciidoc)
-            val resolvedPoPath = Path(po.resolve(relativeAsciidocPath).pathString + ".po")
-            val resolvedTargetAsciidocPath = targetAsciidoc.resolve(relativeAsciidocPath)
-            try {
-                asciidocService.translate(resolvedPoPath, sourceAsciidocPath, resolvedTargetAsciidocPath)
-            } catch (e: RuntimeException) {
-                throw DocL10NKitAppException("Failed to translate asciidoc: ${sourceAsciidoc.absolutePathString()}", e)
+        files.forEach { poPath ->
+            val relativeAdocPath = Path(poPath.parent.pathString + "/" + poPath.nameWithoutExtension).relativeTo(po)
+            val sourceAsciidocPath = sourceAsciidoc.resolve(relativeAdocPath)
+            val targetAsciidocPath = targetAsciidoc.resolve(relativeAdocPath)
+            if (sourceAsciidocPath.exists()) {
+                if (!targetAsciidoc.parent.exists()) {
+                    Files.createDirectories(targetAsciidoc.parent)
+                }
+                try {
+                    asciidocService.translate(poPath, sourceAsciidocPath, targetAsciidocPath)
+                } catch (e: RuntimeException) {
+                    throw DocL10NKitAppException("Failed to translate asciidoc: ${sourceAsciidoc.absolutePathString()}", e)
+                }
             }
         }
 
@@ -110,6 +116,25 @@ class DocL10NKitAppServiceImpl(
         val translated = poTranslatorService.translate(poFile, source, target, isAsciidoctor, glossaryId)
         poDriver.save(translated, filePath)
         logger.info("Finish translation: %s".format(filePath.absolutePathString()))
+    }
+
+    override fun applyTmx(tmx: Path, po: Path) {
+        fun doApplyTmx(poPath: Path){
+            logger.info("Start apply tmx: %s".format(poPath.absolutePathString()))
+            val tmxFile = tmxDriver.load(tmx)
+            val poFile = poDriver.load(poPath)
+            val translated = poTranslatorService.applyTmx(tmxFile, poFile)
+            poDriver.save(translated, poPath)
+            logger.info("Finish apply tmx: %s".format(poPath.absolutePathString()))
+        }
+
+        val fs: FileSystem = FileSystems.getDefault()
+        val globPattern = fs.getPathMatcher("glob:**/*.po")
+
+        Files.walk(po)
+                .filter(globPattern::matches)
+                .filter{ !it.isDirectory() }
+                .forEach(::doApplyTmx)
     }
 
     override fun createGlossary(name: String, source: String, target: String, csvFile: Path): GlossaryInfo {

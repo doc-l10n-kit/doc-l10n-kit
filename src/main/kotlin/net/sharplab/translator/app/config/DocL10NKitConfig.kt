@@ -5,6 +5,8 @@ import net.sharplab.translator.core.driver.adoc.AsciidocDriver
 import net.sharplab.translator.core.driver.adoc.AsciidocDriverImpl
 import net.sharplab.translator.core.driver.po.PoDriver
 import net.sharplab.translator.core.driver.po.PoDriverImpl
+import net.sharplab.translator.core.driver.tmx.TmxDriver
+import net.sharplab.translator.core.driver.tmx.TmxDriverImpl
 import net.sharplab.translator.core.driver.translator.DeepLTranslator
 import net.sharplab.translator.core.driver.translator.Translator
 import javax.enterprise.context.Dependent
@@ -28,6 +30,11 @@ class DocL10NKitConfig(private val asciiDocPoTranslatorSetting: DocL10NKitSettin
     @Produces
     fun poDriver() : PoDriver{
         return PoDriverImpl()
+    }
+
+    @Produces
+    fun tmxDriver() : TmxDriver{
+        return TmxDriverImpl()
     }
 
 }
