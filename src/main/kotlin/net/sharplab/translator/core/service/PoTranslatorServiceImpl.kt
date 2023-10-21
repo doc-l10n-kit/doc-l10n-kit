@@ -4,6 +4,8 @@ import net.sharplab.translator.core.driver.translator.Translator
 import net.sharplab.translator.core.model.po.MessageType
 import net.sharplab.translator.core.model.po.Po
 import net.sharplab.translator.core.model.po.PoMessage
+import net.sharplab.translator.core.model.tmx.Tmx
+import net.sharplab.translator.core.model.tmx.TranslationIndex
 import net.sharplab.translator.core.processor.AsciidoctorMessageProcessor
 import org.jboss.logging.Logger
 import javax.enterprise.context.Dependent
@@ -33,6 +35,19 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
         eraseTranslatedMessage(messagesToErase)
 
         return Po(target, messages)
+    }
+
+    override fun applyTmx(tmx: Tmx, po: Po): Po {
+        val translationIndex = TranslationIndex.create(tmx, po.target)
+        val messages = po.messages
+        messages.filter { it.fuzzy || it.messageString.isEmpty() }.forEach {
+            val value = translationIndex[it.messageId]
+            if(value != null){
+                it.messageString = value
+                it.fuzzy = false
+            }
+        }
+        return Po(po.target, messages)
     }
 
     private fun translate(messages: List<String>, srcLang: String, dstLang: String, isAsciidoctor: Boolean, glossaryId: String? = null): List<String> {
@@ -100,6 +115,9 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
     }
 
     private fun requiresTranslation(message: PoMessage): Boolean{
+        if(!message.fuzzy){
+            return false
+        }
         if(message.messageId.isEmpty()){
             return false
         }

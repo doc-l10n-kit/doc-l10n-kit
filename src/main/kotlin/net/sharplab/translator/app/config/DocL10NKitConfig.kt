@@ -1,12 +1,11 @@
 package net.sharplab.translator.app.config
 
 import net.sharplab.translator.app.setting.DocL10NKitSetting
-import net.sharplab.translator.core.driver.adoc.AsciidocDriver
-import net.sharplab.translator.core.driver.adoc.AsciidocDriverImpl
 import net.sharplab.translator.core.driver.po.PoDriver
 import net.sharplab.translator.core.driver.po.PoDriverImpl
+import net.sharplab.translator.core.driver.tmx.TmxDriver
+import net.sharplab.translator.core.driver.tmx.TmxDriverImpl
 import net.sharplab.translator.core.driver.translator.DeepLTranslator
-import net.sharplab.translator.core.driver.translator.Translator
 import javax.enterprise.context.Dependent
 import javax.enterprise.inject.Produces
 
@@ -21,13 +20,13 @@ class DocL10NKitConfig(private val asciiDocPoTranslatorSetting: DocL10NKitSettin
     }
 
     @Produces
-    fun asciidocDriver() : AsciidocDriver{
-        return AsciidocDriverImpl()
+    fun poDriver() : PoDriver{
+        return PoDriverImpl()
     }
 
     @Produces
-    fun poDriver() : PoDriver{
-        return PoDriverImpl()
+    fun tmxDriver() : TmxDriver{
+        return TmxDriverImpl()
     }
 
 }
