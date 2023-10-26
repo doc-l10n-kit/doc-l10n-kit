@@ -23,6 +23,7 @@ class DeepLTranslator(apiKey: String) : Translator {
             textTranslatorOptions.ignoreTags = IGNORE_ELEMENT_NAMES
             textTranslatorOptions.tagHandling = "xml"
             textTranslatorOptions.glossaryId = glossaryId
+            textTranslatorOptions.formality = Formality.PreferMore
             translations = deepLApi.translateText(texts, srcLang, dstLang, textTranslatorOptions)
         } catch (e: DeepLException) {
             throw DeepLTranslatorException("DeepL error is thrown", e)
