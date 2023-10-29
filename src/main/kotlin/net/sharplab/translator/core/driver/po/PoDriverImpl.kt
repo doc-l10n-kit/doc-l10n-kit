@@ -24,13 +24,13 @@ class PoDriverImpl : PoDriver {
             val catalog = Catalog()
 
             val headerMessage = Message()
-            val headerValues = """
-            Language: ${po.target}
-            MIME-Version: 1.0
-            Content-Type: text/plain; charset=UTF-8
-            Content-Transfer-Encoding: 8bit
-            X-Generator: doc-l10n-kit
-        """.trimIndent()
+            val headerValues =
+"""Language: ${po.target}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Generator: doc-l10n-kit
+"""
             headerMessage.msgid = ""
             headerMessage.msgstr = headerValues
             catalog.addMessage(headerMessage)
