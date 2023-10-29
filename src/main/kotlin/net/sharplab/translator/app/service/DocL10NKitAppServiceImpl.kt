@@ -2,7 +2,6 @@ package net.sharplab.translator.app.service
 
 import com.deepl.api.GlossaryInfo
 import net.sharplab.translator.app.exception.DocL10NKitAppException
-import net.sharplab.translator.app.setting.DocL10NKitSetting
 import net.sharplab.translator.core.driver.po.PoDriver
 import net.sharplab.translator.core.driver.tmx.TmxDriver
 import net.sharplab.translator.core.driver.translator.DeepLTranslator
@@ -18,11 +17,11 @@ import kotlin.io.path.*
 
 @Dependent
 class DocL10NKitAppServiceImpl(
-        private val poTranslatorService: PoTranslatorService,
-        private val deepLTranslator: DeepLTranslator,
-        private val poDriver: PoDriver,
-        private val tmxDriver: TmxDriver,
-        private val asciiDocPoTranslatorSetting: DocL10NKitSetting) : DocL10NKitAppService {
+    private val poTranslatorService: PoTranslatorService,
+    private val deepLTranslator: DeepLTranslator,
+    private val poDriver: PoDriver,
+    private val tmxDriver: TmxDriver
+) : DocL10NKitAppService {
 
     private val logger = Logger.getLogger(DocL10NKitAppServiceImpl::class.java)
 

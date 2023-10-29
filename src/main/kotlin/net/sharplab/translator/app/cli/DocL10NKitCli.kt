@@ -61,7 +61,7 @@ class DocL10NKitCli : QuarkusApplication {
         }
 
         @CommandLine.Command(name = "apply-tmx")
-        class ApplyTmxCommand(private val docL10nKitAppService: DocL10NKitAppService, private val docL10nKitSetting: DocL10NKitSetting) : Runnable {
+        class ApplyTmxCommand(private val docL10nKitAppService: DocL10NKitAppService) : Runnable {
 
             private val logger = LoggerFactory.getLogger(this::class.java)
 

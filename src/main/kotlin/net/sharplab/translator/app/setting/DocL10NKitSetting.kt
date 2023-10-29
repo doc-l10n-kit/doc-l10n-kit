@@ -7,7 +7,7 @@ import javax.enterprise.context.Dependent
 @Dependent
 class DocL10NKitSetting {
     @ConfigProperty(name = "translator.deepL.apiKey")
-    lateinit var deepLApiKey: String
+    lateinit var deepLApiKey: Optional<String>
     @ConfigProperty(name = "translator.language.source", defaultValue = "en")
     lateinit var defaultSourceLang: String
     @ConfigProperty(name = "translator.language.destination", defaultValue = "ja")

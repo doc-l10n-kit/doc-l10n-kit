@@ -5,11 +5,8 @@ import java.nio.file.Path
 
 class DeepLTranslator(apiKey: String) : Translator {
 
-    private val deepLApi : com.deepl.api.Translator
-
-    init {
-        val translatorOptions = TranslatorOptions()
-        deepLApi = Translator(apiKey,translatorOptions)
+    private val deepLApi : com.deepl.api.Translator by lazy {
+        Translator(apiKey)
     }
 
     override fun translate(texts: List<String>, srcLang: String, dstLang: String, glossaryId: String?): List<String> {
