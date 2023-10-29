@@ -1,6 +1,7 @@
 package net.sharplab.translator.app.service
 
 import com.deepl.api.GlossaryInfo
+import net.sharplab.translator.app.exception.DocL10NKitAppException
 import net.sharplab.translator.app.setting.DocL10NKitSetting
 import net.sharplab.translator.core.driver.po.PoDriver
 import net.sharplab.translator.core.driver.tmx.TmxDriver
@@ -34,13 +35,19 @@ class DocL10NKitAppServiceImpl(
     }
 
     override fun applyTmx(tmx: Path, po: Path) {
+        val tmxFile = tmxDriver.load(tmx)
+
         fun doApplyTmx(poPath: Path){
-            logger.info("Start apply tmx: %s".format(poPath.absolutePathString()))
-            val tmxFile = tmxDriver.load(tmx)
-            val poFile = poDriver.load(poPath)
-            val translated = poTranslatorService.applyTmx(tmxFile, poFile)
-            poDriver.save(translated, poPath)
-            logger.info("Finish apply tmx: %s".format(poPath.absolutePathString()))
+            try{
+                logger.info("Start applying tmx: %s".format(poPath.absolutePathString()))
+                val poFile = poDriver.load(poPath)
+                val translated = poTranslatorService.applyTmx(tmxFile, poFile)
+                poDriver.save(translated, poPath)
+                logger.info("Finish applying tmx: %s".format(poPath.absolutePathString()))
+            }
+            catch(e: RuntimeException){
+                throw DocL10NKitAppException("Failed applying tmx: %s".format(poPath.absolutePathString()), e)
+            }
         }
 
         val fs: FileSystem = FileSystems.getDefault()
@@ -49,6 +56,7 @@ class DocL10NKitAppServiceImpl(
         Files.walk(po)
                 .filter(globPattern::matches)
                 .filter{ !it.isDirectory() }
+                .parallel()
                 .forEach(::doApplyTmx)
     }
 
