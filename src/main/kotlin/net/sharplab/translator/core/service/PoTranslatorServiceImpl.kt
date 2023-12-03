@@ -50,6 +50,19 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
         return Po(po.target, messages)
     }
 
+    override fun applyFuzzyTmx(fuzzyTmx: Tmx, po: Po): Po {
+        val translationIndex = TranslationIndex.create(fuzzyTmx, po.target)
+        val messages = po.messages
+        messages.filter { it.fuzzy || it.messageString.isEmpty() }.forEach {
+            val value = translationIndex[it.messageId]
+            if(value != null){
+                it.messageString = value
+                it.fuzzy = true
+            }
+        }
+        return Po(po.target, messages)
+    }
+
     private fun translate(messages: List<String>, srcLang: String, dstLang: String, isAsciidoctor: Boolean, glossaryId: String? = null): List<String> {
         return if(isAsciidoctor){
             val preProcessedMessages = messages.map { messageProcessor.preProcess(it) }

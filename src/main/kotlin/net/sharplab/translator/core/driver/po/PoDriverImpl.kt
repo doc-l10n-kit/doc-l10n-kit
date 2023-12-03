@@ -30,7 +30,7 @@ class PoDriverImpl : PoDriver {
             Content-Type: text/plain; charset=UTF-8
             Content-Transfer-Encoding: 8bit
             X-Generator: doc-l10n-kit
-        """.trimIndent()
+        """.trimIndent() + "\n"
             headerMessage.msgid = ""
             headerMessage.msgstr = headerValues
             catalog.addMessage(headerMessage)
