@@ -22,20 +22,21 @@ class PoDriverImpl : PoDriver {
         FileOutputStream(path.toFile()).use { outputStream ->
             val poWriter = PoWriter()
             val catalog = Catalog()
+            if(po.messages.all { message -> message.messageId.isNotEmpty() }){
+                val headerMessage = Message()
+                val headerValues =
+                    """Language: ${po.target}
+                    MIME-Version: 1.0
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+                    X-Generator: doc-l10n-kit
+                    """.trimIndent() + "\n"
+                headerMessage.msgid = ""
+                headerMessage.msgstr = headerValues
+                catalog.addMessage(headerMessage)
+            }
 
-            val headerMessage = Message()
-            val headerValues = """
-            Language: ${po.target}
-            MIME-Version: 1.0
-            Content-Type: text/plain; charset=UTF-8
-            Content-Transfer-Encoding: 8bit
-            X-Generator: doc-l10n-kit
-        """.trimIndent() + "\n"
-            headerMessage.msgid = ""
-            headerMessage.msgstr = headerValues
-            catalog.addMessage(headerMessage)
-
-            po.messages.filter { it.messageId.isNotEmpty() }.forEach { item ->
+            po.messages.forEach { item ->
                 val messageImpl = item as PoMessageImpl
                 catalog.addMessage(messageImpl.message)
             }

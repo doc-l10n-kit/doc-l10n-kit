@@ -15,7 +15,7 @@ class DocL10NKitConfig(private val asciiDocPoTranslatorSetting: DocL10NKitSettin
     @Produces
     fun deeplTranslator(): DeepLTranslator
     {
-        val deepLApiKey = asciiDocPoTranslatorSetting.deepLApiKey
+        val deepLApiKey = asciiDocPoTranslatorSetting.deepLApiKey.orElse("")
         return DeepLTranslator(deepLApiKey)
     }
 
