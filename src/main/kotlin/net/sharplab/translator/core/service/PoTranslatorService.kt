@@ -7,5 +7,7 @@ interface PoTranslatorService{
 
     fun translate(po: Po, source: String, target: String, isAsciidoctor: Boolean = true, glossaryId: String? = null): Po
     fun applyTmx(tmx: Tmx, po: Po): Po
+    fun applyFuzzyTmx(fuzzyTmx: Tmx, po: Po): Po
+
 
 }

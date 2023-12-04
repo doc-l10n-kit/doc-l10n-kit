@@ -20,7 +20,7 @@ class DocL10NKitCli : QuarkusApplication {
     @Inject
     lateinit var factory: IFactory
 
-    @CommandLine.Command(name = "po", subcommands = [PoCommand.MachineTranslateCommand::class, PoCommand.ApplyTmxCommand::class, PoCommand.NormalizeCommand::class])
+    @CommandLine.Command(name = "po", subcommands = [PoCommand.MachineTranslateCommand::class, PoCommand.ApplyTmxCommand::class, PoCommand.ApplyFuzzyTmxCommand::class, PoCommand.NormalizeCommand::class])
     class PoCommand() {
         @CommandLine.Command(name = "machine-translate")
         class MachineTranslateCommand(private val docL10nKitAppService: DocL10NKitAppService, private val docL10nKitSetting: DocL10NKitSetting) : Runnable {
@@ -60,8 +60,9 @@ class DocL10NKitCli : QuarkusApplication {
             }
         }
 
-        @CommandLine.Command(name = "apply-tmx")
+        @CommandLine.Command(name = "apply-tmx", description = ["Translate messages in .po file with tmx file"])
         class ApplyTmxCommand(private val docL10nKitAppService: DocL10NKitAppService) : Runnable {
+
 
             private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -74,7 +75,7 @@ class DocL10NKitCli : QuarkusApplication {
 
             override fun run() {
                 try{
-                    docL10nKitAppService.applyTmx(tmx, po)
+                    docL10nKitAppService.applyConfirmedTmx(tmx, po)
                 }
                 catch (e: DocL10NKitAppException){
                     logger.error("doc-l10n-kit failed with error: ${e.message}", e)
@@ -85,6 +86,33 @@ class DocL10NKitCli : QuarkusApplication {
                 }
             }
         }
+
+        @CommandLine.Command(name = "apply-fuzzy-tmx", description = ["Translate fuzzy messages in .po file with fuzzy tmx file"])
+        class ApplyFuzzyTmxCommand(private val docL10nKitAppService: DocL10NKitAppService, private val docL10nKitSetting: DocL10NKitSetting) : Runnable {
+
+            private val logger = LoggerFactory.getLogger(this::class.java)
+
+            @CommandLine.Option(order = 1, names = ["--fuzzy-tmx"], description = ["fuzzy tmx"])
+            private lateinit var fuzzyTmx: Path
+            @CommandLine.Option(order = 2, names = ["--po"], description = ["po"])
+            private lateinit var po: Path
+            @CommandLine.Option(order = 9, names = ["--help", "-h"], description = ["print help"], usageHelp = true)
+            private var help = false
+
+            override fun run() {
+                try{
+                    docL10nKitAppService.applyFuzzyTmx(fuzzyTmx, po)
+                }
+                catch (e: DocL10NKitAppException){
+                    logger.error("doc-l10n-kit failed with error: ${e.message}", e)
+                }
+                catch (e: Exception){
+                    logger.error("doc-l10n-kit failed with error: ${e.message}\n${e.stackTraceToString()}", e)
+                    exitProcess(1)
+                }
+            }
+        }
+
 
         @CommandLine.Command(name = "normalize")
         class NormalizeCommand(private val docL10nKitAppService: DocL10NKitAppService) : Runnable {

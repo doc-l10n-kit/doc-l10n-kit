@@ -33,14 +33,13 @@ class DocL10NKitAppServiceImpl(
         logger.info("Finish translation: %s".format(filePath.absolutePathString()))
     }
 
-    override fun applyTmx(tmx: Path, po: Path) {
-        val tmxFile = tmxDriver.load(tmx)
-
+    override fun applyConfirmedTmx(confirmedTmx: Path, po: Path) {
         fun doApplyTmx(poPath: Path){
             try{
                 logger.info("Start applying tmx: %s".format(poPath.absolutePathString()))
+                val confirmedTmxFile = tmxDriver.load(confirmedTmx)
                 val poFile = poDriver.load(poPath)
-                val translated = poTranslatorService.applyTmx(tmxFile, poFile)
+                val translated = poTranslatorService.applyTmx(confirmedTmxFile, poFile)
                 poDriver.save(translated, poPath)
                 logger.info("Finish applying tmx: %s".format(poPath.absolutePathString()))
             }
@@ -56,6 +55,25 @@ class DocL10NKitAppServiceImpl(
                 .filter(globPattern::matches)
                 .filter{ !it.isDirectory() }
                 .parallel()
+                .forEach(::doApplyTmx)
+    }
+
+    override fun applyFuzzyTmx(fuzzyTmx: Path, po: Path) {
+        fun doApplyTmx(poPath: Path){
+            logger.info("Start apply fuzzy tmx: %s".format(poPath.absolutePathString()))
+            val fuzzyTmxFile = tmxDriver.load(fuzzyTmx)
+            val poFile = poDriver.load(poPath)
+            val translated = poTranslatorService.applyFuzzyTmx(fuzzyTmxFile, poFile)
+            poDriver.save(translated, poPath)
+            logger.info("Finish apply fuzzy tmx: %s".format(poPath.absolutePathString()))
+        }
+
+        val fs: FileSystem = FileSystems.getDefault()
+        val globPattern = fs.getPathMatcher("glob:**/*.po")
+
+        Files.walk(po)
+                .filter(globPattern::matches)
+                .filter{ !it.isDirectory() }
                 .forEach(::doApplyTmx)
     }
 
