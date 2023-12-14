@@ -13,7 +13,8 @@ class PoDriverImpl : PoDriver {
     override fun load(path: Path): Po {
         val poParser = PoParser()
         val catalog = poParser.parseCatalog(path.toFile())
-        val target = "ja_JP" //TODO
+        val target = catalog.locateHeader().msgstr.split("\n")
+                .associate { line -> line.split(":").let { Pair(it.first().trim(), it.last().trim()) } }["Language"]  ?: "en_US"
         val messages = catalog.map {item -> PoMessageImpl(item) }
         return Po(target, messages)
     }

@@ -1,6 +1,9 @@
 package net.sharplab.translator.core.model.tmx
 
+import org.jboss.logging.Logger
+
 class TranslationIndex {
+
 
     private val index: Map<String, String>
     private val secondaryIndex: Map<String, String>
@@ -11,6 +14,7 @@ class TranslationIndex {
     }
 
     companion object{
+        private val logger = Logger.getLogger(TranslationIndex::class.java)
         fun create(tmx: Tmx, target: String): TranslationIndex{
             val index = HashMap<String, String>()
             tmx.tmxBody.translationUnits.forEach {
