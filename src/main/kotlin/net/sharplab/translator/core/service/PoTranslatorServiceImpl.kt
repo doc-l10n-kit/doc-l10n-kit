@@ -162,6 +162,11 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
             MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME -> false
             MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_URL -> false
 
+            MessageType.YAML_HASH_VALUE_LINKS_AVATAR -> false
+            MessageType.YAML_HASH_VALUE_LINKS_LOGIN -> false
+            MessageType.YAML_HASH_VALUE_LINKS_NAME -> false
+            MessageType.YAML_HASH_VALUE_LINKS_URL -> false
+
             MessageType.YAML_HASH_VALUE_CATEGORIES_GUIDES_URL -> false
             else -> true
         }
@@ -195,6 +200,11 @@ class PoTranslatorServiceImpl(private val translator: Translator) : PoTranslator
             MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_TYPE -> true
             MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME -> true
             MessageType.YAML_HASH_VALUE_TYPES_TUTORIAL_URL -> true
+
+            MessageType.YAML_HASH_VALUE_LINKS_AVATAR -> true
+            MessageType.YAML_HASH_VALUE_LINKS_LOGIN -> true
+            MessageType.YAML_HASH_VALUE_LINKS_NAME -> true
+            MessageType.YAML_HASH_VALUE_LINKS_URL -> true
 
             MessageType.YAML_HASH_VALUE_CATEGORIES_GUIDES_URL -> true
             else -> false
