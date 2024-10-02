@@ -50,6 +50,11 @@ class MessageType {
         const val YAML_HASH_VALUE_TYPES_TUTORIAL_FILENAME = "type: Hash Value: types tutorial filename"
         const val YAML_HASH_VALUE_TYPES_TUTORIAL_URL = "type: Hash Value: types tutorial url"
 
+        const val YAML_HASH_VALUE_LINKS_AVATAR = "type: Hash Value: links avatar"
+        const val YAML_HASH_VALUE_LINKS_LOGIN = "type: Hash Value: links login"
+        const val YAML_HASH_VALUE_LINKS_NAME = "type: Hash Value: links name"
+        const val YAML_HASH_VALUE_LINKS_URL = "type: Hash Value: links url"
+
         const val YAML_HASH_VALUE_CATEGORIES_GUIDES_URL = "type: Hash Value: categories guides url"
         const val YAML_HASH_VALUE_CATEGORIES_GUIDES_TITLE = "type: Hash Value: categories guides title"
         const val YAML_HASH_VALUE_CATEGORIES_GUIDES_DESCRIPTION = "type: Hash Value: categories guides description"
